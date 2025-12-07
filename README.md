@@ -109,6 +109,116 @@ Eksik veya doğrulanması gereken noktalar
 - `phoneNumber` ve `frontend` dizinlerinin içinde uygun Dockerfile ve build konfigürasyonu olduğundan emin olun.
 - Eğer frontend statik dosyalarla servis edilmiyorsa (ör. ayrı bir dev server kullanıyorsa), nginx/Dockerfile yapılandırmasını gözden geçirin.
 
-İletişim
---------
-Bu README'i proje köküne ekleyebilirim veya isterseniz backend ve frontend dizinlerinin içeriğini inceleyip Dockerfile/CI iyileştirmeleri için örnek PR hazırlayabilirim.
+---
+# API Endpoint Dokümantasyonu
+Aşağıda backend servisinde kullanılan API endpoint’lerinin örnek istek ve yanıtları bulunmaktadır.
+
+## **POST /api/phone/validate**
+Telefon numarasını doğrular.
+
+### İstek
+```json
+{
+  "number": "074173"
+}
+```
+
+### Yanıt
+```json
+{
+  "number": "074173",
+  "rules": {
+    "sumOddEqualsEven": true,
+    "hasNonZeroDigit": true,
+    "sumFirstEqualsLast": true
+  },
+  "valid": true
+}
+```
+
+---
+## **POST /api/registration**
+Telefon doğrulaması geçerliyse kullanıcı kaydı oluşturur.
+
+### İstek
+```json
+{
+  "name": "Ali Veli",
+  "email": "ali23@exampl.com",
+  "phone": "684189"
+}
+```
+
+### Yanıt
+```json
+{
+  "status": "accepted",
+  "message": "Telefon numarası geçerli, kayıt başarıyla oluşturuldu.",
+  "data": {
+    "id": 26,
+    "name": "Ali Veli",
+    "email": "ali23@exampl.com",
+    "phone": "684189",
+    "createdAt": "2025-12-07T16:18:52.977846524"
+  },
+  "valid": true
+}
+```
+
+---
+## **GET /api/phone/count**
+Doğrulanan telefon numarası sayısını döner.
+
+### Yanıt
+```json
+{
+  "telefon sayısı": 8
+}
+```
+
+---
+## **GET /api/users?page=0&size=5**
+Kayıtlı kullanıcıları sayfalı olarak listeler.
+
+### Yanıt
+```json
+[
+  {
+    "id": 26,
+    "name": "Ali Veli",
+    "email": "ali23@exampl.com",
+    "phone": "684189",
+    "createdAt": "2025-12-07T16:18:52.977847"
+  },
+  {
+    "id": 21,
+    "name": "emrullah45",
+    "email": "emrullah4uygun@gmail.com",
+    "phone": "274175",
+    "createdAt": "2025-11-20T19:22:37.392625"
+  },
+  {
+    "id": 15,
+    "name": "Ali Veli",
+    "email": "ali@exampl.com",
+    "phone": "664169",
+    "createdAt": "2025-11-20T16:32:24.282532"
+  },
+  {
+    "id": 13,
+    "name": "Ali Veli",
+    "email": "ali@example.com",
+    "phone": "464167",
+    "createdAt": "2025-11-20T13:15:18.532947"
+  },
+  {
+    "id": 11,
+    "name": "emrullah45",
+    "email": "f231229051@ktun.edu.tr",
+    "phone": "254155",
+    "createdAt": "2025-11-20T12:39:23.763317"
+  }
+]
+```
+
+---
